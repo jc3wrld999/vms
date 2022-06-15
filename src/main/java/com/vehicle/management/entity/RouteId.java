@@ -1,4 +1,4 @@
-package com.vehicle.management.bus.entity;
+package com.vehicle.management.entity;
 
 import org.apache.ibatis.type.Alias;
 

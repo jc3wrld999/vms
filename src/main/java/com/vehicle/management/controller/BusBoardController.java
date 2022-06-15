@@ -1,22 +1,24 @@
-package com.vehicle.management.bus.controller;
+package com.vehicle.management.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.vehicle.management.bus.service.BusBoardService;
+import com.vehicle.management.data.BusBoardService;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Controller
+@RequestMapping("/bus")
 public class BusBoardController {
 
     @Autowired
     private final BusBoardService busBoardService;
 
-    @GetMapping("/bus/index")
+    @GetMapping("/index")
     public String getBoardIndex() {
         // int pageSize = 5;
 		// Pageable pageable = PageRequest.of(1, pageSize);
@@ -24,21 +26,21 @@ public class BusBoardController {
         return "/bus/index";
     }
 
-    @GetMapping("/bus/list")
+    @GetMapping("/list")
     public String getBoardList(Model model) {
         model.addAttribute("resultMap", busBoardService.findAll(1));
         System.out.println("/////////////////////" + busBoardService.findAll(1).toString() + "/////////////////////");
         return "/bus/list";
     }
 
-    @GetMapping("/bus/map")
+    @GetMapping("/map")
     public String getBoardMap() {
         // int pageSize = 5;
 		// Pageable pageable = PageRequest.of(1, pageSize);
         // ldbDataDailyRepository.findAll(pageable);
         return "/bus/map";
     }
-    @GetMapping("/bus/map2")
+    @GetMapping("/map2")
     public String getBoardMap2() {
         // int pageSize = 5;
 		// Pageable pageable = PageRequest.of(1, pageSize);

@@ -1,4 +1,4 @@
-package com.vehicle.management.bus.service;
+package com.vehicle.management.data;
 
 import java.util.List;
 
@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.vehicle.management.bus.entity.BusStationInfo;
-import com.vehicle.management.bus.service.db.BusBoardRepository;
+import com.vehicle.management.data.db.BusBoardMapper;
+import com.vehicle.management.entity.BusStationInfo;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class BusBoardService {
     
     @Autowired
-    private BusBoardRepository busBoardRepository;
+    private BusBoardMapper busBoardMapper;
 
     @Transactional
     public List<BusStationInfo> findById(int id) {
@@ -25,7 +25,7 @@ public class BusBoardService {
 
     @Transactional
     public List<BusStationInfo> findAll(int id) {
-        List<BusStationInfo> busBoardList = busBoardRepository.findAll();
+        List<BusStationInfo> busBoardList = busBoardMapper.selectStationInfoList();
         return busBoardList;
     }
 }
