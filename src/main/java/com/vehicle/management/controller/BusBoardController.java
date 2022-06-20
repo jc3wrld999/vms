@@ -45,6 +45,13 @@ public class BusBoardController {
         // int pageSize = 5;
 		// Pageable pageable = PageRequest.of(1, pageSize);
         // ldbDataDailyRepository.findAll(pageable);
-        return "/bus/iframe";
+        return "/bus/map2";
+    }
+    @GetMapping("/iframe2")
+    public String getBoardIframe2() {
+        // int pageSize = 5;
+		// Pageable pageable = PageRequest.of(1, pageSize);
+        // ldbDataDailyRepository.findAll(pageable);
+        return "/bus/iframe2";
     }
 }

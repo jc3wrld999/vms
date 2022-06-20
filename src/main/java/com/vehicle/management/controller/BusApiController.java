@@ -1,15 +1,13 @@
 package com.vehicle.management.controller;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vehicle.management.data.BusBoardService;
 import com.vehicle.management.entity.BusArriveInfo;
 
 import lombok.RequiredArgsConstructor;
@@ -19,30 +17,14 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/rest/arrive")
 public class BusApiController {
 
-    /** api 인증키 */ 
-    @Value("#{configProp['bus.arrive.info.auth_key']}")
-    private String busArriveInfoAuthKey;
-
-    /** api path */
-    @Value("#{configProp['bus.arrive.info.path']}")
-    private String busArriveInfoPath;
+    @Autowired
+    private BusBoardService busBoardService;
     
-    /** 
-     * 경유노선 전체 정류소 도착예정정보를 조회한다. 노선ID에 해당하는 전체 정류소 도착예정정보 목록을 조회한다.
-     */
-    @GetMapping("/getArrInfoByRouteAll/{busRouteId}")
-    public ResponseEntity<BusArriveInfo> getArrInfoByRouteAllList(@PathVariable(value="busRouteId") int busRouteId) {
+    @GetMapping("/getArrInfoByRouteAll/{busRouteId}") // 100100118
+    public ResponseEntity<?> getArrInfoByRouteAllList(@PathVariable(value="busRouteId") int busRouteId) {
         
-        //
-        try {
-            String path = busArriveInfoPath + "/getArrInfoByRouteAll?serviceKey=" 
-                                            + busArriveInfoAuthKey;
-            URL url = new URL(busArriveInfoPath);
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        return null;
+        ResponseEntity<?> busArriveInfoList = busBoardService.getArrInfoByRouteAllList(busRouteId);
+        return busArriveInfoList;
     }
 
     /**
@@ -51,7 +33,7 @@ public class BusApiController {
     @GetMapping("/getArrInfoByRoute/{busRouteId}")
     public ResponseEntity<BusArriveInfo> getArrInfoByRouteList(@PathVariable(value="busRouteId") int busRouteId) {
         
-        /** serviceKey 인증키       */
+        /** serviceKey 인증키       busArriveInfoAuthKey */
 
         /** stId 정류소 ID      112000001 */
 
@@ -68,7 +50,7 @@ public class BusApiController {
     @GetMapping("/getLowArrInfoByRoute/{busRouteId}")
     public ResponseEntity<BusArriveInfo> getLowArrInfoByRouteList(@PathVariable(value="busRouteId") int busRouteId) {
         
-        /** serviceKey 인증키       */
+        /** serviceKey 인증키       busArriveInfoAuthKey */
 
         /** stId 정류소 ID      112000001 */
 
@@ -85,7 +67,7 @@ public class BusApiController {
     @GetMapping("/getLowArrInfoByStId/{busRouteId}")
     public ResponseEntity<BusArriveInfo> getLowArrInfoByStIdList(@PathVariable(value="busRouteId") int busRouteId) {
         
-        /** serviceKey 인증키       */
+        /** serviceKey 인증키       busArriveInfoAuthKey */
 
         /** stId 정류소 ID      112000001 */
 

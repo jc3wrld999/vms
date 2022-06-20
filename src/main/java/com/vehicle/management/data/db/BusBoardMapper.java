@@ -12,4 +12,5 @@ import com.vehicle.management.entity.BusStationInfo;
 public interface BusBoardMapper {
 
 	public List<BusStationInfo> selectStationInfoList();
+
 }
