@@ -27,29 +27,81 @@
   </head>
   <body>
     <div id="map"></div>
-
     <script>
       // TO MAKE THE MAP APPEAR YOU MUST
       // ADD YOUR ACCESS TOKEN FROM
       // https://account.mapbox.com
       mapboxgl.accessToken =
         "pk.eyJ1IjoiamMzd3JsZDk5OSIsImEiOiJjbDRtdGV3ODEwMm9wM2ttZXpjZHRnZHFhIn0.3WMaZZTngmkKBFLQY1IgcQ"; // 계정에 있는 Public Access Token 입력
+
       const map = new mapboxgl.Map({
-        container: "map",
-        style: "mapbox://styles/mapbox/streets-v11",
-        center: [12.550343, 55.665957],
-        zoom: 8,
+        container: "map", // container ID
+        style: "mapbox://styles/mapbox/streets-v11", // style URL
+        center: [126.886199, 37.476106], // starting position [lng, lat]
+        zoom: 9, // starting zoom
+      });
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          map.flyTo({
+            center: [position.coords.longitude, position.coords.latitude],
+            essential: true, // this animation is considered essential with respect to prefers-reduced-motion
+            zoom: 14,
+          });
+        });
+      }
+      map.on("load", function () {
+        map.on("moveend", function (e) {
+          console.log(e);
+        });
+      });
+      $(function () {
+        $.ajax({
+          url: "/api/rest/getArrInfoByRouteAll/100100118",
+          type: "get",
+          data: { idArr: "test" },
+          dataType: "JSON",
+          success: function (r) {
+            console.log(r);
+            // form.submit();
+            // var obj = JSON.parse(r);
+            // console.log(obj.msgBody);
+            getArrInfoByRouteAll(r["msgBody"]["itemList"]);
+            // console.log(r["msgBody"]);
+            // $.each(r["msgBody"]["itemList"], function(index, item) {
+            //   console.log(item["stNm"]);
+            // })
+          },
+          error: function (e) {
+            console.log(e);
+          },
+        });
       });
 
-      // Create a default Marker and add it to the map.
-      const marker1 = new mapboxgl.Marker()
-        .setLngLat([12.554729, 55.70651])
-        .addTo(map);
+      /** 특정 버스 노선 좌표 조회 */
+      function getRoutePath(data) {
+        document.getElementById("heading-num").innerHTML =
+          data[0]["rtNm"] + "번 버스 도착정보";
+        for (i = 0; i < data.length; i++) {
+          var currentFeature = data[i];
+          console.log(currentFeature);
+          var prop = currentFeature.properties;
+          console.log(prop);
+          var listings = document.getElementById("listings");
+          var listing = listings.appendChild(document.createElement("div"));
+          listing.className = "item";
+          listing.id = "listing-" + i;
 
-      // Create a default Marker, colored black, rotated 45 degrees.
-      const marker2 = new mapboxgl.Marker({ color: "black", rotation: 45 })
-        .setLngLat([12.65147, 55.608166])
-        .addTo(map);
+          var link = listing.appendChild(document.createElement("a"));
+          link.href = "#";
+          link.className = "title";
+          link.dataPosition = i;
+          link.innerHTML = currentFeature["stNm"];
+
+          var details = listing.appendChild(document.createElement("div"));
+          details.innerHTML = currentFeature["arrmsg1"];
+          details.innerHTML += " &middot; " + currentFeature["arrmsg2"];
+        }
+      }
     </script>
   </body>
 </html>

@@ -242,73 +242,12 @@
         var stores = {};
       
         $(function() {
-          $.ajax({
-            url: "/api/rest/getArrInfoByRouteAll/100100118",
-                      type: "get",
-                      data: { idArr: "test" },
-                      dataType: "JSON",
-                      success: function(r) {
-                        console.log(r);
-                        // form.submit();
-                        // var obj = JSON.parse(r);
-                        // console.log(obj.msgBody);
-                        getArrInfoByRouteAll(r["msgBody"]["itemList"]);
-                        // console.log(r["msgBody"]);
-                        // $.each(r["msgBody"]["itemList"], function(index, item) {
-                        //   console.log(item["stNm"]);
-                        // })
-                      },
-                      error: function(e) {
-                        console.log(e);
-                      }
-          });
-              });
-      
-        // var toggle = true;
-      
-        // var onClick = function () {
-        //   toggle = !toggle;
-      
-        //   var sidebarElement = document.getElementById('sidebar');
-        //   var mapElement = document.getElementById('map');
-      
-        //   if (toggle) {
-        //     sidebarElement.style.width = '33.3333%';
-        //     mapElement.style.width = '66.6666%';
-        //     mapElement.style.left = '33.3333%';
-        //   } else {
-        //     sidebarElement.style.width = '0'
-        //     mapElement.style.width = '100%';
-        //     mapElement.style.left = '0';
-        //   }
-      
-        //   map.resize();
-        // };
-      
-        // var stores = {
-        //   "type": "FeatureCollection",
-        //   "features": [
-        //     {
-        //       "type": "Feature",
-        //       "geometry": {
-        //         "type": "Point",
-        //         "coordinates": [
-        //           -77.034084142948,
-        //           38.909671288923
-        //         ]
-        //       },
-        //       "properties": {
-        //         "phoneFormatted": "(202) 234-7336",
-        //         "phone": "2022347336",
-        //         "address": "1471 P St NW",
-        //         "city": "Washington DC",
-        //         "country": "United States",
-        //         "crossStreet": "at 15th St NW",
-        //         "postalCode": "20005",
-        //         "state": "D.C."
-        //       }
-        //     }]
-        //   };
+          fetchRouteByStation();
+          
+          // fetchArrInfoByRouteAll();
+
+        });
+    
         // This adds the data to the map
         map.on('load', function (e) {
           // This is where your '.addLayer()' used to be, instead add only the source without styling a layer
@@ -316,111 +255,66 @@
             "type": "geojson",
             
           });
-    //       map.addLayer({
-    //     "id": "route",
-    //     "type": "line",
-    //     "source": {
-    //         "type": "geojson",
-    //         "data": {
-    //             "type": "Feature",
-    //             "properties": {},
-    //             "geometry": {
-    //                 "type": "LineString",
-    //                 "coordinates": [
-    //                     [-122.48369693756104, 37.83381888486939],
-    //                     [-122.48348236083984, 37.83317489144141],
-    //                     [-122.48339653015138, 37.83270036637107],
-    //                     [-122.48356819152832, 37.832056363179625],
-    //                     [-122.48404026031496, 37.83114119107971],
-    //                     [-122.48404026031496, 37.83049717427869],
-    //                     [-122.48348236083984, 37.829920943955045],
-    //                     [-122.48356819152832, 37.82954808664175],
-    //                     [-122.48507022857666, 37.82944639795659],
-    //                     [-122.48610019683838, 37.82880236636284],
-    //                     [-122.48695850372314, 37.82931081282506],
-    //                     [-122.48700141906738, 37.83080223556934],
-    //                     [-122.48751640319824, 37.83168351665737],
-    //                     [-122.48803138732912, 37.832158048267786],
-    //                     [-122.48888969421387, 37.83297152392784],
-    //                     [-122.48987674713133, 37.83263257682617],
-    //                     [-122.49043464660643, 37.832937629287755],
-    //                     [-122.49125003814696, 37.832429207817725],
-    //                     [-122.49163627624512, 37.832564787218985],
-    //                     [-122.49223709106445, 37.83337825839438],
-    //                     [-122.49378204345702, 37.83368330777276]
-    //                 ]
-    //             }
-    //         }
-    //     },
-    //     "layout": {
-    //     },
-    //     "paint": {
-    //         "line-color": "#888",
-    //         "line-width": 8,
-    //         "line-dasharray": [0, 4, 3]
-    //     }
-    // });
-          // Initialize the list
-          buildLocationList(stores);
+
+
       
         });
-      
-        // This is where your interactions with the symbol layer used to be
-        // Now you have interactions with DOM markers instead
-        stores.features.forEach(function(marker, i) {
-          // Create an img element for the marker
-          var el = document.createElement('div');
-          el.id = "marker-" + i;
-          el.className = 'marker';
-          el.style.left='-28px';
-          el.style.top='-46px';
-          // Add markers to the map at all points
-          new mapboxgl.Marker(el)
-              .setLngLat(marker.geometry.coordinates)
-              .addTo(map);
-      
-          el.addEventListener('click', function(e){
-              // 1. Fly to the point
-              flyToStore(marker);
-      
-              // 2. Close all other popups and display popup for clicked store
-              createPopUp(marker);
-      
-              // 3. Highlight listing in sidebar (and remove highlight for all other listings)
-              var activeItem = document.getElementsByClassName('active');
-      
-              e.stopPropagation();
-              if (activeItem[0]) {
-                 activeItem[0].classList.remove('active');
-              }
-      
-              var listing = document.getElementById('listing-' + i);
-              listing.classList.add('active');
-      
+      // 특정 정류장 버스 조회
+      function fetchRouteByStation() {
+        $.ajax({
+            url: "/api/rest/getRouteByStation/12180",
+                      type: "get",
+                      dataType: "JSON",
+                      success: function(r) {
+                        console.log(r);
+                        getRouteByStation(r["msgBody"]["itemList"]);
+                      },
+                      error: function(e) {
+                        console.log(e);
+                      }
           });
-        });
+      }
+
+      function getRouteByStation(data) {
+          // document.getElementById('heading-num').innerHTML = data[0]["rtNm"] + " 정류장 버스 정보";
+          for (i = 0; i < data.length; i++) {
+            var currentFeature = data[i];
+            console.log(currentFeature);
+            var prop = currentFeature.properties;
+            console.log(prop);
+            var listings = document.getElementById('listings');
+            var listing = listings.appendChild(document.createElement('div'));
+            listing.className = 'item';
+            listing.id = "listing-" + i;
       
+            var link = listing.appendChild(document.createElement('a'));
+            link.href = '#';
+            link.className = 'title';
+            link.dataPosition = i;
+            link.innerHTML = currentFeature["busRouteNm"];
       
-        function flyToStore(currentFeature) {
-          map.flyTo({
-              center: currentFeature.geometry.coordinates,
-              zoom: 15
-            });
+            var details = listing.appendChild(document.createElement('div'));
+            details.innerHTML = currentFeature["arrmsg1"];
+            details.innerHTML += ' &middot; ' + currentFeature["arrmsg2"];
+
+          }
+        }     
+        // 특정 버스 노선도 조회
+        function fetchArrInfoByRouteAll() {
+          $.ajax({
+            url: "/api/rest/getArrInfoByRouteAll/100100118",
+                      type: "get",
+                      data: { idArr: "test" },
+                      dataType: "JSON",
+                      success: function(r) {
+                        console.log(r);
+                        getArrInfoByRouteAll(r["msgBody"]["itemList"]);
+                      },
+                      error: function(e) {
+                        console.log(e);
+                      }
+          });
         }
-      
-        function createPopUp(currentFeature) {
-          var popUps = document.getElementsByClassName('mapboxgl-popup');
-          if (popUps[0]) popUps[0].remove();
-      
-      
-          var popup = new mapboxgl.Popup({closeOnClick: false})
-                .setLngLat(currentFeature.geometry.coordinates)
-                .setHTML('<h3>Sweetgreen</h3>' +
-                  '<h4>' + currentFeature.properties.address + '</h4>')
-                .addTo(map);
-        }
-      
-      
         function getArrInfoByRouteAll(data) {
           document.getElementById('heading-num').innerHTML = data[0]["rtNm"] + "번 버스 도착정보";
           for (i = 0; i < data.length; i++) {

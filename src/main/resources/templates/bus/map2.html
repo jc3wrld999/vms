@@ -25,6 +25,20 @@
           bottom: 0;
           width: 100%;
         }
+        .bus_marker {
+          background-image: url("/static/icon/bus_stop_marker.png");
+          background-size: cover;
+          width: 50px;
+          height: 50px;
+        }
+        .mapboxgl-popup {
+          max-width: 200px;
+        }
+        .mapboxgl-popup-content {
+          text-align: center;
+          font-family: "Open Sans", sans-serif;
+          color: black;
+        }
       </style>
       <div id="map"></div>
       <script>
@@ -44,22 +58,17 @@
         });
 
         $(function () {
+          // map.loadImage("/static/icon/bus_stop_marker.png", (err, image) => {
+          //   if (err) console.error(err);
+          //   map.addImage("marker", image);
+          // });
           if ("geolocation" in navigator) {
             navigator.geolocation.getCurrentPosition((position) => {
-              long = position.coords.longitude;
-              lat = position.coords.latitude;
               map.flyTo({
                 center: [position.coords.longitude, position.coords.latitude],
                 essential: true, // this animation is considered essential with respect to prefers-reduced-motion
                 zoom: 14,
               });
-              // Create a default Marker and add it to the map.
-              const marker1 = new mapboxgl.Marker({ color: "black" })
-                .setLngLat([
-                  position.coords.longitude,
-                  position.coords.latitude,
-                ])
-                .addTo(map);
 
               fetchRoutePath(
                 position.coords.longitude,
@@ -70,7 +79,6 @@
         });
 
         function fetchRoutePath(long, lat) {
-          alert(long + " " + lat);
           $.ajax({
             url: "/api/rest/getStationByPos",
             data: { tmX: long, tmY: lat, radius: 1000 },
@@ -92,70 +100,25 @@
           //   data[0]["rtNm"] + "번 버스 도착정보";
           for (i = 0; i < data.length; i++) {
             var currentFeature = data[i];
+            var el = document.createElement("div");
+            el.className = "bus_marker";
+            el.setAttribute("long", currentFeature["gpsX"]);
+            el.setAttribute("lat", currentFeature["gpsY"]);
+
+            // Create a default Marker and add it to the map.
+            var marker1 = new mapboxgl.Marker(el)
+              .setLngLat([currentFeature["gpsX"], currentFeature["gpsY"]])
+              .setPopup(
+                new mapboxgl.Popup({ offset: 25 }) // add popups
+                  .setHTML("<h4>" + currentFeature["stationNm"] + "</h4>")
+              )
+              .addTo(map);
+            // mapboxgl.addEventListener("click", (e) => {
+            //   // console.log(e);
+            //   console.log(e);
+            // });
             console.log(currentFeature);
-            var prop = currentFeature.properties;
-            console.log(prop);
-            var listings = document.getElementById("listings");
-            var listing = listings.appendChild(document.createElement("div"));
-            listing.className = "item";
-            listing.id = "listing-" + i;
-
-            var link = listing.appendChild(document.createElement("a"));
-            link.href = "#";
-            link.className = "title";
-            link.dataPosition = i;
-            link.innerHTML = currentFeature["stNm"];
-
-            var details = listing.appendChild(document.createElement("div"));
-            details.innerHTML = currentFeature["arrmsg1"];
-            details.innerHTML += " &middot; " + currentFeature["arrmsg2"];
           }
-          map.on("load", function () {
-            map.addLayer({
-              id: "route",
-              type: "line",
-              source: {
-                type: "geojson",
-                data: {
-                  type: "Feature",
-                  properties: {},
-                  geometry: {
-                    type: "LineString",
-                    coordinates: [
-                      [-122.48369693756104, 37.83381888486939],
-                      [-122.48348236083984, 37.83317489144141],
-                      [-122.48339653015138, 37.83270036637107],
-                      [-122.48356819152832, 37.832056363179625],
-                      [-122.48404026031496, 37.83114119107971],
-                      [-122.48404026031496, 37.83049717427869],
-                      [-122.48348236083984, 37.829920943955045],
-                      [-122.48356819152832, 37.82954808664175],
-                      [-122.48507022857666, 37.82944639795659],
-                      [-122.48610019683838, 37.82880236636284],
-                      [-122.48695850372314, 37.82931081282506],
-                      [-122.48700141906738, 37.83080223556934],
-                      [-122.48751640319824, 37.83168351665737],
-                      [-122.48803138732912, 37.832158048267786],
-                      [-122.48888969421387, 37.83297152392784],
-                      [-122.48987674713133, 37.83263257682617],
-                      [-122.49043464660643, 37.832937629287755],
-                      [-122.49125003814696, 37.832429207817725],
-                      [-122.49163627624512, 37.832564787218985],
-                      [-122.49223709106445, 37.83337825839438],
-                      [-122.49378204345702, 37.83368330777276],
-                    ],
-                  },
-                },
-              },
-              layout: {},
-              paint: {
-                "line-color": "#00933C",
-                "line-width": 8,
-                "line-dasharray": [0, 4, 3],
-              },
-            });
-            // enableLineAnimation('route');
-          });
         }
         map.on("load", function () {
           map.on("moveend", function (e) {
