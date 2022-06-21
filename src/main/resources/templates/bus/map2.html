@@ -7,55 +7,161 @@
   <!-- layout Content -->
   <th:block layout:fragment="content-wrapper">
     <div class="content-wrapper">
-      <!-- 지도를 표시할 div 입니다 -->
-      <div id="map" style="width: 600px; height: 400px"></div>
+      <link
+        href="https://api.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.css"
+        rel="stylesheet"
+      />
+      <script
+        src="https://api.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.js"
+      ></script>
+      <style>
+        body {
+          margin: 0;
+          padding: 0;
+        }
+        #map {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          width: 100%;
+        }
+      </style>
+      <div id="map"></div>
       <script>
-        var map = L.map("map").setView([51.505, -0.09], 13);
+        var long;
+        var lat;
+        // TO MAKE THE MAP APPEAR YOU MUST
+        // ADD YOUR ACCESS TOKEN FROM
+        // https://account.mapbox.com
+        mapboxgl.accessToken =
+          "pk.eyJ1IjoiamMzd3JsZDk5OSIsImEiOiJjbDRtdGV3ODEwMm9wM2ttZXpjZHRnZHFhIn0.3WMaZZTngmkKBFLQY1IgcQ"; // 계정에 있는 Public Access Token 입력
 
-        var tiles = L.tileLayer(
-          "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-          {
-            maxZoom: 19,
-            attribution:
-              '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        const map = new mapboxgl.Map({
+          container: "map", // container ID
+          style: "mapbox://styles/mapbox/streets-v11", // style URL
+          center: [126.886199, 37.476106], // starting position [lng, lat]
+          zoom: 9, // starting zoom
+        });
+
+        $(function () {
+          if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition((position) => {
+              long = position.coords.longitude;
+              lat = position.coords.latitude;
+              map.flyTo({
+                center: [position.coords.longitude, position.coords.latitude],
+                essential: true, // this animation is considered essential with respect to prefers-reduced-motion
+                zoom: 14,
+              });
+              // Create a default Marker and add it to the map.
+              const marker1 = new mapboxgl.Marker({ color: "black" })
+                .setLngLat([
+                  position.coords.longitude,
+                  position.coords.latitude,
+                ])
+                .addTo(map);
+
+              fetchRoutePath(
+                position.coords.longitude,
+                position.coords.latitude
+              );
+            });
           }
-        ).addTo(map);
+        });
 
-        var marker = L.marker([51.5, -0.09])
-          .addTo(map)
-          .bindPopup("<b>Hello world!</b><br />I am a popup.")
-          .openPopup();
-
-        var circle = L.circle([51.508, -0.11], {
-          color: "red",
-          fillColor: "#f03",
-          fillOpacity: 0.5,
-          radius: 500,
-        })
-          .addTo(map)
-          .bindPopup("I am a circle.");
-
-        var polygon = L.polygon([
-          [51.509, -0.08],
-          [51.503, -0.06],
-          [51.51, -0.047],
-        ])
-          .addTo(map)
-          .bindPopup("I am a polygon.");
-
-        var popup = L.popup()
-          .setLatLng([51.513, -0.09])
-          .setContent("I am a standalone popup.")
-          .openOn(map);
-
-        function onMapClick(e) {
-          popup
-            .setLatLng(e.latlng)
-            .setContent("You clicked the map at " + e.latlng.toString())
-            .openOn(map);
+        function fetchRoutePath(long, lat) {
+          alert(long + " " + lat);
+          $.ajax({
+            url: "/api/rest/getStationByPos",
+            data: { tmX: long, tmY: lat, radius: 1000 },
+            type: "get",
+            dataType: "JSON",
+            success: function (r) {
+              console.log(r);
+              getRoutePath(r["msgBody"]["itemList"]);
+            },
+            error: function (e) {
+              console.log(e);
+            },
+          });
         }
 
-        map.on("click", onMapClick);
+        /** 특정 버스 노선 좌표 조회 */
+        function getRoutePath(data) {
+          // document.getElementById("heading-num").innerHTML =
+          //   data[0]["rtNm"] + "번 버스 도착정보";
+          for (i = 0; i < data.length; i++) {
+            var currentFeature = data[i];
+            console.log(currentFeature);
+            var prop = currentFeature.properties;
+            console.log(prop);
+            var listings = document.getElementById("listings");
+            var listing = listings.appendChild(document.createElement("div"));
+            listing.className = "item";
+            listing.id = "listing-" + i;
+
+            var link = listing.appendChild(document.createElement("a"));
+            link.href = "#";
+            link.className = "title";
+            link.dataPosition = i;
+            link.innerHTML = currentFeature["stNm"];
+
+            var details = listing.appendChild(document.createElement("div"));
+            details.innerHTML = currentFeature["arrmsg1"];
+            details.innerHTML += " &middot; " + currentFeature["arrmsg2"];
+          }
+          map.on("load", function () {
+            map.addLayer({
+              id: "route",
+              type: "line",
+              source: {
+                type: "geojson",
+                data: {
+                  type: "Feature",
+                  properties: {},
+                  geometry: {
+                    type: "LineString",
+                    coordinates: [
+                      [-122.48369693756104, 37.83381888486939],
+                      [-122.48348236083984, 37.83317489144141],
+                      [-122.48339653015138, 37.83270036637107],
+                      [-122.48356819152832, 37.832056363179625],
+                      [-122.48404026031496, 37.83114119107971],
+                      [-122.48404026031496, 37.83049717427869],
+                      [-122.48348236083984, 37.829920943955045],
+                      [-122.48356819152832, 37.82954808664175],
+                      [-122.48507022857666, 37.82944639795659],
+                      [-122.48610019683838, 37.82880236636284],
+                      [-122.48695850372314, 37.82931081282506],
+                      [-122.48700141906738, 37.83080223556934],
+                      [-122.48751640319824, 37.83168351665737],
+                      [-122.48803138732912, 37.832158048267786],
+                      [-122.48888969421387, 37.83297152392784],
+                      [-122.48987674713133, 37.83263257682617],
+                      [-122.49043464660643, 37.832937629287755],
+                      [-122.49125003814696, 37.832429207817725],
+                      [-122.49163627624512, 37.832564787218985],
+                      [-122.49223709106445, 37.83337825839438],
+                      [-122.49378204345702, 37.83368330777276],
+                    ],
+                  },
+                },
+              },
+              layout: {},
+              paint: {
+                "line-color": "#00933C",
+                "line-width": 8,
+                "line-dasharray": [0, 4, 3],
+              },
+            });
+            // enableLineAnimation('route');
+          });
+        }
+        map.on("load", function () {
+          map.on("moveend", function (e) {
+            console.log(e);
+          });
+        });
       </script>
     </div>
   </th:block>

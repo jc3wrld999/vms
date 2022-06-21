@@ -42,10 +42,15 @@ public class BusBoardController {
     }
     @GetMapping("/map2")
     public String getBoardMap2() {
-        // int pageSize = 5;
-		// Pageable pageable = PageRequest.of(1, pageSize);
-        // ldbDataDailyRepository.findAll(pageable);
         return "/bus/map2";
+    }
+    @GetMapping("/map3")
+    public String getBoardMap3() {
+        return "/bus/map3";
+    }
+    @GetMapping("/map4")
+    public String getBoardMap4() {
+        return "/bus/map4";
     }
     @GetMapping("/iframe2")
     public String getBoardIframe2() {

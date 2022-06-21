@@ -34,13 +34,25 @@ public class BusBoardService {
         return busBoardList;
     }
 
-    public ResponseEntity<?> getArrInfoByRouteAllList(int busRouteId) {
-        return busBoardApi.getArrInfoByRouteAllList(busRouteId);
+    public ResponseEntity<?> getArrInfoByRouteAll(int busRouteId) {
+        return busBoardApi.getArrInfoByRouteAll(busRouteId);
     }
 
-    public ResponseEntity<?> getRoutePathList(int busRouteId) {
-        return busBoardApi.getRoutePathList(busRouteId);
+    public ResponseEntity<?> getRoutePath(int busRouteId) {
+        return busBoardApi.getRoutePath(busRouteId);
     }
+
+    public ResponseEntity<?> getStationByPos(double tmX, double tmY, int radius) {
+        return busBoardApi.getStationByPos(tmX, tmY, radius);
+    }
+
+    public ResponseEntity<?> getRouteByStation(int arsId) {
+        return busBoardApi.getRouteByStation(arsId);
+    }
+
+    // public ResponseEntity<?> getStationByPos(double parseDouble, int parseInt, double parseDouble2) {
+    //     return null;
+    // }
 
     
 }

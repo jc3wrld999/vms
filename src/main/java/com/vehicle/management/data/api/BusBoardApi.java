@@ -34,7 +34,7 @@ public class BusBoardApi {
     /** 
      * 경유노선 전체 정류소 도착예정정보를 조회한다. 노선ID에 해당하는 전체 정류소 도착예정정보 목록을 조회한다.
      */
-    public ResponseEntity<?> getArrInfoByRouteAllList(int busRouteId) {
+    public ResponseEntity<?> getArrInfoByRouteAll(int busRouteId) {
             
         String url = callBackUrl + "/arrive/getArrInfoByRouteAll";
 
@@ -55,11 +55,32 @@ public class BusBoardApi {
 
         return response;
     }
+    /**
+     * 한 정류소의 모든 노선목록을 조회한다.
+     */
+    public ResponseEntity<?> getRouteByStation(int arsId) {
+            
+        String url = callBackUrl + "/stationinfo/getRouteByStation";
+
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders header = new HttpHeaders();
+        // Response Header to UTF-8
+        header.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        
+        URI uri = UriComponentsBuilder.fromHttpUrl(url).queryParam("serviceKey", serviceKey)
+                                                                .queryParam("arsId", arsId)
+                                                                .queryParam("resultType", "json")
+                                                                .build(true)
+                                                                .toUri();
+        
+        ResponseEntity<?> response = restTemplate.exchange(uri, HttpMethod.GET, new HttpEntity<String>(header), Object.class);
+        return response;
+    }      
 
     /**
      * 한 정류소의 특정노선의 도착예정정보를 조회한다. 정류소ID와 노선ID에 해당하는 도착예정정보를 조회한다.
      */
-    public ResponseEntity<?> getArrInfoByRouteList(int busRouteId) {
+    public ResponseEntity<?> getArrInfoByRoute(int busRouteId) {
             
         String url = callBackUrl + "/getArrInfoByRouteAll";
 
@@ -83,7 +104,7 @@ public class BusBoardApi {
     /**
      * 지정된 좌표와 반경 범위 내의 정류소 목록을 조회한다.
      */
-    public ResponseEntity<?> getStaionsByPosList(int tmX, int tmY, int radius) {
+    public ResponseEntity<?> getStationByPos(double tmX, double tmY, int radius) {
         
         String url = callBackUrl + "/stationinfo/getStationByPos";
 
@@ -123,7 +144,7 @@ public class BusBoardApi {
     /**
      * 노선의 지도상 경로를 리턴한다. 아이디에 해당하는 노선의 형상 목록을 조회한다.
      */
-    public ResponseEntity<?> getRoutePathList(int busRouteId) {
+    public ResponseEntity<?> getRoutePath(int busRouteId) {
         
         String url = callBackUrl + "/busRouteInfo/getRoutePath";
 
@@ -137,5 +158,7 @@ public class BusBoardApi {
         
         ResponseEntity<?> response = restTemplate.getForEntity(uri, String.class);
         return response;
-    }    
+    }
+    
+
 }

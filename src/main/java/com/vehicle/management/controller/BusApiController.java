@@ -1,44 +1,84 @@
 package com.vehicle.management.controller;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vehicle.management.data.BusBoardService;
 import com.vehicle.management.entity.BusArriveInfo;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/rest")
+@Component
+@PropertySource("classpath:config.properties")
 public class BusApiController {
+
+    @Value("${bus.api.test.routeId}")
+    private String routeId;
+
+    @Value("${bus.api.test.tmX}")
+    private String tmX;
+
+    @Value("${bus.api.test.tmY}")
+    private String tmY;
 
     @Autowired
     private BusBoardService busBoardService;
-    
-    @GetMapping("/getArrInfoByRouteAll/{busRouteId}") // 100100118
-    public Object getArrInfoByRouteAllList(@PathVariable(value="busRouteId") int busRouteId, Model model) {
-        
-        ResponseEntity<?> busArriveInfoList = busBoardService.getArrInfoByRouteAllList(busRouteId);
-        model.addAttribute("resultMap", busArriveInfoList.getBody());
-        return busArriveInfoList.getBody();
+
+    /** 위치 기반 정류소 정보 가져오기 */
+    @GetMapping("/getStationByPos")
+    public ResponseEntity<?> getStationByPos(@RequestParam Map<String, String> paramMap, Model model) {
+        System.out.println(paramMap.get("tmX")+"//////////////////////////////////////");
+        ResponseEntity<?> busStaionsByPosList = busBoardService.getStationByPos(Double.valueOf(paramMap.get("tmX")), Double.valueOf(paramMap.get("tmY")), Integer.parseInt(paramMap.get("radius")));
+        return busStaionsByPosList;
     }
 
-    @GetMapping("/getRoutePathList/{busRouteId}") // 100100118
-    public ResponseEntity<?> getRoutePathList(@PathVariable(value="busRouteId") int busRouteId, Model model) {
+    /** 특정 정류소의 버스 노선 정보 가져오기 */
+    @GetMapping("/getRouteByStation/{arsId}")
+    public ResponseEntity<?> getRouteByStation(@PathVariable(value="arsId") int arsId, Model model) {
         
-        ResponseEntity<?> busRoutePathList = busBoardService.getRoutePathList(busRouteId);
-        model.addAttribute("resultMap", busRoutePathList.getBody());
-        // System.out.println(busRoutePathList.toString());
-        return busRoutePathList;
+        ResponseEntity<?> busRouteByStation = busBoardService.getRouteByStation(arsId);
+        return busRouteByStation;
     }
+
+    /** 특정 버스 모든 노선 도착 정보 가져오기 */
+    @GetMapping("/getArrInfoByRouteAll/{busRouteId}")
+    public ResponseEntity<?> getArrInfoByRouteAll(@PathVariable(value="busRouteId") int busRouteId, Model model) {
+        
+        ResponseEntity<?> busArriveInfoList = busBoardService.getArrInfoByRouteAll(busRouteId);
+        return busArriveInfoList;
+    }
+
+    /** 특정 버스 특정 정류장 도착 정보 가져오기 */
+    @GetMapping("/getArrInfoByRoute/{busRouteId}")
+    public ResponseEntity<?> getArrInfoByRoute(@PathVariable(value="busRouteId") int busRouteId, Model model) {
+        
+        // ResponseEntity<?> busArriveInfoList = busBoardService.getArrInfoByRouteAll(busRouteId);
+        return null;
+    }
+
+    /** 특정 버스 노선 좌표 정보 가져오기 */
+    @GetMapping("/getRoutePath/{busRouteId}")
+    public ResponseEntity<?> getRoutePath(@PathVariable(value="busRouteId") int busRouteId, Model model) {
+        
+        ResponseEntity<?> busRoutePath = busBoardService.getRoutePath(busRouteId);
+        return busRoutePath;
+    }
+
+
 
     /**
      * 한 정류소의 특정노선의 도착예정정보를 조회한다. 정류소ID와 노선ID에 해당하는 도착예정정보를 조회한다.
