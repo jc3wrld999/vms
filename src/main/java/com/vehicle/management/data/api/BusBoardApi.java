@@ -51,7 +51,7 @@ public class BusBoardApi {
         // ResponseEntity<?> response = restTemplate.exchange(uri, HttpMethod.GET, new HttpEntity<String>(header), Object.class);
         // System.out.println(response.getBody());
         ResponseEntity<?> response = restTemplate.getForEntity(uri, String.class);
-        System.out.println(response.getBody());
+        // System.out.println(response.getBody());
 
         return response;
     }
@@ -83,8 +83,59 @@ public class BusBoardApi {
     /**
      * 지정된 좌표와 반경 범위 내의 정류소 목록을 조회한다.
      */
-    public ResponseEntity<?> getStaionsByPosList(int x, int y) {
+    public ResponseEntity<?> getStaionsByPosList(int tmX, int tmY, int radius) {
         
-        return null;
+        String url = callBackUrl + "/stationinfo/getStationByPos";
+
+        RestTemplate restTemplate = new RestTemplate();
+        
+        URI uri = UriComponentsBuilder.fromHttpUrl(url).queryParam("serviceKey", serviceKey)
+                                                                .queryParam("tmX", tmX)
+                                                                .queryParam("tmY", tmY)
+                                                                .queryParam("radius", radius)
+                                                                .queryParam("resultType", "json")
+                                                                .build(true)
+                                                                .toUri();
+        
+        ResponseEntity<?> response = restTemplate.getForEntity(uri, String.class);
+        return response;
     }
+
+    /**
+     * 고유번호에 해당하는 경유노선목록을 조회한다.
+     */
+    public ResponseEntity<?> getRouteByStationList(int arsId) {
+        
+        String url = callBackUrl + "/stationinfo/getRouteByStation";
+
+        RestTemplate restTemplate = new RestTemplate();
+        
+        URI uri = UriComponentsBuilder.fromHttpUrl(url).queryParam("serviceKey", serviceKey)
+                                                                .queryParam("arsId", arsId)
+                                                                .queryParam("resultType", "json")
+                                                                .build(true)
+                                                                .toUri();
+        
+        ResponseEntity<?> response = restTemplate.getForEntity(uri, String.class);
+        return response;
+    }
+
+    /**
+     * 노선의 지도상 경로를 리턴한다. 아이디에 해당하는 노선의 형상 목록을 조회한다.
+     */
+    public ResponseEntity<?> getRoutePathList(int busRouteId) {
+        
+        String url = callBackUrl + "/busRouteInfo/getRoutePath";
+
+        RestTemplate restTemplate = new RestTemplate();
+        
+        URI uri = UriComponentsBuilder.fromHttpUrl(url).queryParam("serviceKey", serviceKey)
+                                                                .queryParam("busRouteId", busRouteId)
+                                                                .queryParam("resultType", "json")
+                                                                .build(true)
+                                                                .toUri();
+        
+        ResponseEntity<?> response = restTemplate.getForEntity(uri, String.class);
+        return response;
+    }    
 }

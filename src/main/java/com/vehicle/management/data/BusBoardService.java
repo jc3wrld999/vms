@@ -37,4 +37,10 @@ public class BusBoardService {
     public ResponseEntity<?> getArrInfoByRouteAllList(int busRouteId) {
         return busBoardApi.getArrInfoByRouteAllList(busRouteId);
     }
+
+    public ResponseEntity<?> getRoutePathList(int busRouteId) {
+        return busBoardApi.getRoutePathList(busRouteId);
+    }
+
+    
 }
