@@ -1,23 +1,18 @@
-## 버스 게시판 🚍
+## 서울시 버스 노선 정보 사이트
 
 #
 
-가져오기
+`지도 이동시 재검색`
 
-1. rest api rest template으로 http 통신해서 가져오기
-   api 더미데이터 넣고 connect
-   위도 경도 넣고 connect
-2. excel data > db 변환해서 db 넣기
-   db connect
+![map_marker1](https://user-images.githubusercontent.com/61821641/175223494-299a7a9c-73b4-4ca9-aebb-48b81ca89632.gif)
 
-뿌리기
+`마커 클릭시 정류장 도착버스 정보`
 
-0. mapbox 로 지도 그리기
+![map_marker2](https://user-images.githubusercontent.com/61821641/175223574-7a02f06f-f16a-45a5-8fe6-034ee9fefa2e.gif)
 
-1. api 가져온거 뿌리기
-   마커찍기
-   리스트(셀렉트)
-2. db 가져온거 그리기 (노선도)
+`버스 클릭시 버스 노선도와 도착 정보`
+
+![map_lineString2](https://user-images.githubusercontent.com/61821641/175224631-384cb64a-a641-4294-81e4-5c2bdd431e11.gif)
 
 #
 
@@ -94,14 +89,6 @@ term 배차간격
 ```
 
 ![image](https://user-images.githubusercontent.com/61821641/174710018-a2173c30-47b7-4b5e-8254-97b1efeab894.png)
-
-#
-
-## mapbox 분석
-
-마커찍기
-
-트랙그리기
 
 #
 
