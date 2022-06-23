@@ -4,7 +4,11 @@
 
 <mapper namespace="com.vehicle.management.data.db.BusBoardMapper">
     
-    <select id ="selectStationInfoList" resultType="BusStationInfo">
+    <select id ="selectRoutePathByRouteId" resultType="BusStationInfo">
         SELECT DISTINCT * FROM STATION_INFO WHERE ROUTE_ID = #{busRouteId} ORDER BY STATION_NO ASC
+    </select>
+
+    <select id ="selectRouteIdByRouteNm" resultType="RouteId">
+        SELECT DISTINCT * FROM ROUTE_ID WHERE ROUTE_NAME = #{routeNm}
     </select>
 </mapper>

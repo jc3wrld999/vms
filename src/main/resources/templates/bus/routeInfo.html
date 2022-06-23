@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/default_layout}"
+>
+  <!-- layout Content -->
+  <th:block layout:fragment="content-wrapper">
+    <div class="content-wrapper">
+      <link rel="stylesheet" href="/static/map/map.css" />
+
+      <div id="my_sidebar" class="my_sidebar">
+        <div class="heading">
+          <h1 id="heading-num" th:value="${routeId}"></h1>
+        </div>
+        <div id="listings" class="listings"></div>
+      </div>
+      <div id="map" class="map"></div>
+
+      <div id="map"></div>
+      <script src="/static/map/map.js"></script>
+      <script th:inline="javascript">
+        // RouteId Init
+        var routeId = /*[[${routeId}]]*/ "100100118";
+
+        $(function () {
+          // 특정 버스 노선도 조회
+          fetchRoutePath(routeId);
+          // 특정 버스 노선별 도착정보 조회
+          fetchArrInfoByRouteAll(routeId);
+        });
+      </script>
+    </div>
+  </th:block>
+</html>

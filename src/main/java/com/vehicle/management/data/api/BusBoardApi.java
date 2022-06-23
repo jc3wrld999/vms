@@ -2,8 +2,6 @@ package com.vehicle.management.data.api;
 
 import java.net.URI;
 import java.nio.charset.Charset;
-import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -18,7 +16,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Repository
 @Component
@@ -65,8 +62,9 @@ public class BusBoardApi {
         String url = callBackUrl + "/stationinfo/getRouteByStation";
 
         RestTemplate restTemplate = new RestTemplate();
+        
         HttpHeaders header = new HttpHeaders();
-        // Response Header to UTF-8
+        
         header.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
         
         URI uri = UriComponentsBuilder.fromHttpUrl(url).queryParam("serviceKey", serviceKey)
@@ -91,7 +89,7 @@ public class BusBoardApi {
 
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders header = new HttpHeaders();
-        // Response Header to UTF-8
+        
         header.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
         
         URI uri = UriComponentsBuilder.fromHttpUrl(url).queryParam("serviceKey", serviceKey)

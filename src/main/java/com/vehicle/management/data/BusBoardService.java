@@ -16,6 +16,7 @@ import com.google.gson.reflect.TypeToken;
 import com.vehicle.management.data.api.BusBoardApi;
 import com.vehicle.management.data.db.BusBoardMapper;
 import com.vehicle.management.entity.BusStationInfo;
+import com.vehicle.management.entity.RouteId;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,14 +31,13 @@ public class BusBoardService {
     private BusBoardApi busBoardApi;
 
     @Transactional
-    public List<BusStationInfo> findById(int id) {
-        return null;
+    public List<RouteId> getRouteIdByRouteNm(String routeNm) {
+        return busBoardMapper.selectRouteIdByRouteNm(routeNm);
     }
 
     @Transactional
-    public List<BusStationInfo> findAll(int routeId) {
-        List<BusStationInfo> busBoardList = busBoardMapper.selectStationInfoList(routeId);
-        return busBoardList;
+    public List<BusStationInfo> getRoutePathByRouteId(int routeId) {
+        return busBoardMapper.selectRoutePathByRouteId(routeId);
     }
 
     public ResponseEntity<?> getArrInfoByRouteAll(int busRouteId) {
@@ -55,7 +55,6 @@ public class BusBoardService {
     public ResponseEntity<JsonNode> getRouteByStation(int arsId) {
         ResponseEntity<JsonNode> response = busBoardApi.getRouteByStation(arsId);
         JsonNode map = response.getBody();
-        System.out.println("//////////////////////////////////////////////");
         // System.out.println(map.get("msgBody").get("itemList").get(0));
         System.out.println(map.toString());
 
@@ -72,9 +71,6 @@ public class BusBoardService {
         return busBoardApi.getRouteByStation(arsId);
     }
 
-    // public ResponseEntity<?> getStationByPos(double parseDouble, int parseInt, double parseDouble2) {
-    //     return null;
-    // }
 
     
 }

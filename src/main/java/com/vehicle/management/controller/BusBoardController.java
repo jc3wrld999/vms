@@ -20,57 +20,22 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/bus")
 public class BusBoardController {
 
-    // @Value("${bus.api.test.routeId}")
     private static final String TEST_ROUTE_ID = "100100118";
-
-    @Autowired
-    private final BusBoardService busBoardService;
 
     @GetMapping("/index")
     public String getBoardIndex() {
-        // int pageSize = 5;
-		// Pageable pageable = PageRequest.of(1, pageSize);
-        // ldbDataDailyRepository.findAll(pageable);
         return "/bus/index";
     }
 
-    @GetMapping("/list")
-    public String getBoardList(@PathVariable(value="routeId") int routeId, Model model) {
-        model.addAttribute("resultMap", busBoardService.findAll(routeId));
-        System.out.println("/////////////////////" + busBoardService.findAll(routeId).toString() + "/////////////////////");
-        return "/bus/list";
-    }
-
-
-    @GetMapping("/map")
-    public String getBoardMap() {
-        // int pageSize = 5;
-		// Pageable pageable = PageRequest.of(1, pageSize);
-        // ldbDataDailyRepository.findAll(pageable);
-        return "/bus/map";
-    }
-    @GetMapping("/map2")
-    public String getBoardMap2() {
-        return "/bus/map2";
-    }
-    @GetMapping("/map3")
+    @GetMapping("/routeInfo")
     public String getBoardMap3(@RequestParam(required = false, defaultValue = TEST_ROUTE_ID) int routeId, Model model) {
         model.addAttribute("routeId", routeId);
-        return "/bus/map3";
+        return "/bus/routeInfo";
     }
-    @GetMapping("/map4")
-    public String getBoardMap4() {
-        return "/bus/map4";
-    }
-    @GetMapping("/map5")
+
+    @GetMapping("/stationInfo")
     public String getBoardMap5() {
-        return "/bus/map5";
+        return "/bus/stationInfo";
     }
-    @GetMapping("/iframe2")
-    public String getBoardIframe2() {
-        // int pageSize = 5;
-		// Pageable pageable = PageRequest.of(1, pageSize);
-        // ldbDataDailyRepository.findAll(pageable);
-        return "/bus/iframe2";
-    }
+
 }
