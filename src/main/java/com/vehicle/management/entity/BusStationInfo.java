@@ -16,7 +16,7 @@ public class BusStationInfo implements Serializable {
 	private String route_name;	
 	private int    station_no;
 	private int    node_id;	
-	private int    ars_id;
+	private String ars_id;
 	private String station_name;
 	private double coordinate_x;
 	private double coordinate_y;

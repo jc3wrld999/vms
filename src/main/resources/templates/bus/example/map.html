@@ -26,7 +26,7 @@
       
               .sidebar {
                 position:absolute;
-                width:33.3333%;
+                width:20%;
                 height:100%;
                 top:0;right:0;
                 overflow:hidden;
@@ -41,8 +41,8 @@
       
               .map {
                 position:absolute;
-                right:33.3333%;
-                width:66.6666%;
+                right:20%;
+                width:80%;
                 top:0;bottom:0;
       
                 -webkit-transition: width 500ms, height 500ms, left 500ms; /* For Safari 3.1 to 6.0 */
@@ -260,7 +260,7 @@
       
         });
       // 특정 정류장 버스 조회
-      function fetchRouteByStation() {
+      function fetchStaionsByPosList() {
         $.ajax({
             url: "/api/rest/getRouteByStation/12180",
                       type: "get",
@@ -294,9 +294,16 @@
             link.innerHTML = currentFeature["busRouteNm"];
       
             var details = listing.appendChild(document.createElement('div'));
-            details.innerHTML = currentFeature["arrmsg1"];
-            details.innerHTML += ' &middot; ' + currentFeature["arrmsg2"];
+            details.innerHTML = currentFeature["stBegin"];
+            details.innerHTML += ' &middot; ' + currentFeature["stEnd"];
 
+            // if(currentFeature["nextBus"]>0) {
+            //   var nextBus = listing.appendChild(document.createElement('div'));
+            //   nextBus.innerHTML = currentFeature["nextBus"] + "분 후 도착";
+            // } else if (currentFeature["nextBus"]<0) {
+            //   var nextBus = listing.appendChild(document.createElement('div'));
+            //   nextBus.innerHTML = currentFeature["nextBus"] + "분 전 도착";
+            // }
           }
         }     
         // 특정 버스 노선도 조회
@@ -337,31 +344,7 @@
             details.innerHTML = currentFeature["arrmsg1"];
             details.innerHTML += ' &middot; ' + currentFeature["arrmsg2"];
 
-      
-      
-      
-            // link.addEventListener('click', function(e){
-            //   // Update the currentFeature to the store associated with the clicked link
-            //   var clickedListing = data.features[this.dataPosition];
-      
-            //   // 1. Fly to the point
-            //   flyToStore(clickedListing);
-      
-            //   // 2. Close all other popups and display popup for clicked store
-            //   createPopUp(clickedListing);
-      
-            //   // 3. Highlight listing in sidebar (and remove highlight for all other listings)
-            //   var activeItem = document.getElementsByClassName('active');
-      
-            //   if (activeItem[0]) {
-            //      activeItem[0].classList.remove('active');
-            //   }
-            //   this.parentNode.classList.add('active');
-      
-      
-      
-      
-            // });
+
           }
         }
 
@@ -387,31 +370,6 @@
             details.innerHTML = currentFeature["arrmsg1"];
             details.innerHTML += ' &middot; ' + currentFeature["arrmsg2"];
 
-      
-      
-      
-            // link.addEventListener('click', function(e){
-            //   // Update the currentFeature to the store associated with the clicked link
-            //   var clickedListing = data.features[this.dataPosition];
-      
-            //   // 1. Fly to the point
-            //   flyToStore(clickedListing);
-      
-            //   // 2. Close all other popups and display popup for clicked store
-            //   createPopUp(clickedListing);
-      
-            //   // 3. Highlight listing in sidebar (and remove highlight for all other listings)
-            //   var activeItem = document.getElementsByClassName('active');
-      
-            //   if (activeItem[0]) {
-            //      activeItem[0].classList.remove('active');
-            //   }
-            //   this.parentNode.classList.add('active');
-      
-      
-      
-      
-            // });
           }
         }
         function enableLineAnimation(layerId) {

@@ -1,9 +1,9 @@
 package com.vehicle.management.data.api;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -15,8 +15,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Repository
 @Component
@@ -58,7 +60,7 @@ public class BusBoardApi {
     /**
      * 한 정류소의 모든 노선목록을 조회한다.
      */
-    public ResponseEntity<?> getRouteByStation(int arsId) {
+    public ResponseEntity<JsonNode> getRouteByStation(int arsId) {
             
         String url = callBackUrl + "/stationinfo/getRouteByStation";
 
@@ -73,7 +75,10 @@ public class BusBoardApi {
                                                                 .build(true)
                                                                 .toUri();
         
-        ResponseEntity<?> response = restTemplate.exchange(uri, HttpMethod.GET, new HttpEntity<String>(header), Object.class);
+        ResponseEntity<JsonNode> response = restTemplate.exchange(uri, HttpMethod.GET, new HttpEntity<String>(header), JsonNode.class);
+        
+        // HashMap<String, Object> resultMap = response.getBody();
+        
         return response;
     }      
 
@@ -96,7 +101,7 @@ public class BusBoardApi {
                                                                 .toUri();
         
         ResponseEntity<?> response = restTemplate.exchange(uri, HttpMethod.GET, new HttpEntity<String>(header), Object.class);
-        System.out.println(response.getBody());
+        // System.out.println(response.getBody());
         // Object response = restTemplate.getForEntity(uri.toUriString(), String.class);
         return response;
     }   

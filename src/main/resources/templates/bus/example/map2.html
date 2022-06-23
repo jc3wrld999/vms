@@ -113,10 +113,10 @@
                   .setHTML("<h4>" + currentFeature["stationNm"] + "</h4>")
               )
               .addTo(map);
-            // mapboxgl.addEventListener("click", (e) => {
-            //   // console.log(e);
-            //   console.log(e);
-            // });
+            el.addEventListener("click", (e) => {
+              // console.log(e);
+              console.log("1111");
+            });
             console.log(currentFeature);
           }
         }

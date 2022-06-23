@@ -12,7 +12,6 @@
           <style>
             body {
                 color:#404040;
-                font:400 15px/22px 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
                 margin:0;
                 padding:0;
                 -webkit-font-smoothing:antialiased;
@@ -142,7 +141,6 @@
                 display:none;
               }
               .mapboxgl-popup-content {
-                font:400 15px/22px 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
                 padding:0;
                 width:180px;
               }
@@ -188,12 +186,26 @@
               min-height: 20px;
               background-color: #3887be;
               color: #fff;
-              font-family: 'Open Sans';
+              /* font-family: 'Open Sans'; */
               border-radius: 5px;
               padding: 10px;
               cursor: pointer;
               margin: 10px 10px;
               position: absolute; top: 0; right: 0; z-index: 999999;
+            }
+            .bus_marker {
+                background-image: url("/static/icon/bus_stop_marker.png");
+                background-size: cover;
+                width: 50px;
+                height: 50px;
+            }
+            .mapboxgl-popup {
+                max-width: 200px;   
+            }
+            .mapboxgl-popup-content {
+                text-align: center;
+                /* font-family: "Open Sans", sans-serif; */
+                color: black;
             }
           </style>
           </head>
@@ -204,7 +216,7 @@
       
           <div id="my_sidebar" class='my_sidebar'>
             <div class='heading'>
-              <h1 id="heading-num" th:value="${routeId}"></h1>
+              <h1 id="heading-num"></h1>
             </div>
           <div id='listings' class='listings'></div>
           </div>
@@ -212,19 +224,19 @@
       
       <div id="map"></div>
       
-      <script th:inline="javascript">
-        var routeId =/*[[${routeId}]]*/ '100100118';
-        
-        // Access Token 
-        mapboxgl.accessToken = 'pk.eyJ1IjoiamMzd3JsZDk5OSIsImEiOiJjbDRtdGV3ODEwMm9wM2ttZXpjZHRnZHFhIn0.3WMaZZTngmkKBFLQY1IgcQ'; 
+      <script>
+        var currentMarkers=[];
+
+        mapboxgl.accessToken = 'pk.eyJ1IjoiamMzd3JsZDk5OSIsImEiOiJjbDRtdGV3ODEwMm9wM2ttZXpjZHRnZHFhIn0.3WMaZZTngmkKBFLQY1IgcQ'; // 계정에 있는 Public Access Token 입력
       
-        // if (!('remove' in Element.prototype)) {
-        //   Element.prototype.remove = function() {
-        //     if (this.parentNode) {
-        //         this.parentNode.removeChild(this);
-        //     }
-        //   };
-        // }
+        // This will let you use the .remove() function later on
+        if (!('remove' in Element.prototype)) {
+          Element.prototype.remove = function() {
+            if (this.parentNode) {
+                this.parentNode.removeChild(this);
+            }
+          };
+        }
       
         // This adds the map
         var map = new mapboxgl.Map({
@@ -235,82 +247,96 @@
           // initial position in [long, lat] format
           center: [126.886199, 37.476106],
           // initial zoom
-          zoom: 11
+          zoom: 13
         });
 
         var stores = {};
       
     
         $(function () {
-          fetchRoutePath(routeId);
-          fetchArrInfoByRouteAll(routeId);
+          // map.loadImage("/static/icon/bus_stop_marker.png", (err, image) => {
+          //   if (err) console.error(err);
+          //   map.addImage("marker", image);
+          // });
+          if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition((position) => {
+              map.flyTo({
+                center: [position.coords.longitude, position.coords.latitude],
+                essential: true, // this animation is considered essential with respect to prefers-reduced-motion
+                zoom: 14,
+              });
+
+              fetchRoutePath(
+                position.coords.longitude,
+                position.coords.latitude
+              );
+            });
+          }
         });
 
-        // 특정 버스 노선도 조회
-        function fetchRoutePath(routeId) {
-
+        function fetchRoutePath(long, lat) {
+            console.log(long, lat)
           $.ajax({
-            url: "/api/rest/getRoutePathByRouteId/" + routeId,
+            url: "/api/rest/getStationByPos",
+            data: { tmX: long, tmY: lat, radius: 1000 },
             type: "get",
-            // data: { idArr: "test" },
-            // dataType: "JSON",
+            dataType: "JSON",
             success: function (r) {
               console.log(r);
-              getRoutePath(r);
+              getRoutePath(r["msgBody"]["itemList"]);
             },
             error: function (e) {
               console.log(e);
             },
           });
         }
+
+        /** 특정 버스 노선 좌표 조회 */
         function getRoutePath(data) {
-          document.getElementById("heading-num").innerHTML =
-            data[0]["route_name"] + "번 버스 노선도";
-          const copy = [];
+          // document.getElementById("heading-num").innerHTML =
+          //   data[0]["rtNm"] + "번 버스 도착정보";
           for (i = 0; i < data.length; i++) {
-            var arr = [data[i]["coordinate_x"], data[i]["coordinate_y"]];
-            copy.push(arr);
+            var currentFeature = data[i];
+            var el = document.createElement("div");
+            el.className = "bus_marker";
+            el.setAttribute("stationId", currentFeature["stationId"]);
+            el.setAttribute("arsId", currentFeature["arsId"]);
+            el.setAttribute("stationNm", currentFeature["stationNm"]);
+
+            // Create a default Marker and add it to the map.
+            var marker1 = new mapboxgl.Marker(el)
+              .setLngLat([currentFeature["gpsX"], currentFeature["gpsY"]])
+              .setPopup(
+                new mapboxgl.Popup({ offset: 5 }) // add popups
+                  .setHTML("<h4>" + currentFeature["stationNm"] + "</h4>")
+              )
+              .addTo(map);
+              currentMarkers.push(marker1);
+            el.addEventListener("click", (e) => {
+              // console.log(e);
+              console.log(e);
+              console.log(e.target.getAttribute('stationId'));
+              fetchStaionsByPosList(e.target.getAttribute('arsId'), e.target.getAttribute('stationNm'));
+            });
+            console.log(currentFeature);
           }
-          console.log(copy);
-          map.on("load", () => {
-            map.addSource("route", {
-              type: "geojson",
-              data: {
-                type: "Feature",
-                properties: {},
-                geometry: {
-                  type: "LineString",
-                  coordinates: copy,
-                },
-              },
-            });
-            map.addLayer({
-              id: "route",
-              type: "line",
-              source: "route",
-              layout: {
-                "line-join": "round",
-                "line-cap": "round",
-              },
-              paint: {
-                "line-color": "#FF6319",
-                "line-width": 4,
-              },
-            });
-
-          });
         }
+        map.on("load", function () {
+          map.on("moveend", function (e) {
+            console.log(e);
+            
+          });
+        });
 
-      
       // 특정 정류장 버스 조회
-      function fetchStaionsByPosList() {
+      function fetchStaionsByPosList(arsId, stationNm) {
         $.ajax({
-            url: "/api/rest/getRouteByStation/12180",
+            url: "/api/rest/getRouteByStation/"+arsId,
                       type: "get",
                       dataType: "JSON",
                       success: function(r) {
                         console.log(r);
-                        getRouteByStation(r["msgBody"]["itemList"]);
+                        getRouteByStation(r["msgBody"]["itemList"], stationNm);
                       },
                       error: function(e) {
                         console.log(e);
@@ -318,19 +344,21 @@
           });
       }
 
-      function getRouteByStation(data) {
+      function getRouteByStation(data, stationNm) {
+        var listings = document.getElementById('listings');
+            listings.innerHTML = "";
+          document.getElementById('heading-num').innerHTML = stationNm;
           for (i = 0; i < data.length; i++) {
             var currentFeature = data[i];
             console.log(currentFeature);
-            var prop = currentFeature.properties;
-            console.log(prop);
-            var listings = document.getElementById('listings');
+            
+            
             var listing = listings.appendChild(document.createElement('div'));
             listing.className = 'item';
             listing.id = "listing-" + i;
       
             var link = listing.appendChild(document.createElement('a'));
-            link.href = '#';
+            link.href = 'javascript:location.href="/bus/map3?routeId='+ currentFeature["busRouteId"] +'"';
             link.className = 'title';
             link.dataPosition = i;
             link.innerHTML = currentFeature["busRouteNm"];
@@ -338,52 +366,26 @@
             var details = listing.appendChild(document.createElement('div'));
             details.innerHTML = currentFeature["stBegin"];
             details.innerHTML += ' &middot; ' + currentFeature["stEnd"];
-          }
-        }     
-        // 특정 버스 노선도 조회
-        function fetchArrInfoByRouteAll(routeId) {
-          $.ajax({
-            url: "/api/rest/getArrInfoByRouteAll/" + routeId,
-                      type: "get",
-                      data: { idArr: "test" },
-                      dataType: "JSON",
-                      success: function(r) {
-                        console.log(r);
-                        getArrInfoByRouteAll(r["msgBody"]["itemList"]);
-                      },
-                      error: function(e) {
-                        console.log(e);
-                      }
-          });
-        }
-        function getArrInfoByRouteAll(data) {
-          for (i = 0; i < data.length; i++) {
-            var currentFeature = data[i];
-            console.log(currentFeature);
-            var prop = currentFeature.properties;
-            console.log(prop);
-            var listings = document.getElementById('listings');
-            var listing = listings.appendChild(document.createElement('div'));
-            listing.className = 'item';
-            listing.id = "listing-" + i;
-      
-            var link = listing.appendChild(document.createElement('a'));
-            link.href = '#';
-            link.className = 'title';
-            link.dataPosition = i;
-            link.innerHTML = currentFeature["stNm"];
-      
-            var details = listing.appendChild(document.createElement('div'));
-            details.innerHTML = currentFeature["arrmsg1"];
-            details.innerHTML += ' &middot; ' + currentFeature["arrmsg2"];
-
 
           }
-        }
-
-
-
+        }  
       
+        map.on('mouseup', (e) => {
+            if (map.isMoving()) {
+                console.log(e.lngLat);
+            removeMarker();
+            fetchRoutePath(e.lngLat.lng, e.lngLat.lat)
+            }
+
+        });
+
+        function removeMarker(){
+            if (currentMarkers!==null) {
+                for (var i = currentMarkers.length - 1; i >= 0; i--) {
+                currentMarkers[i].remove();
+                }
+            }
+        }
       </script>
     </div>
   </th:block>

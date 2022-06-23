@@ -1,8 +1,10 @@
 package com.vehicle.management.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -15,9 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vehicle.management.data.BusBoardService;
 import com.vehicle.management.entity.BusArriveInfo;
+import com.vehicle.management.entity.BusStationInfo;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 
 @RequiredArgsConstructor
 @RestController
@@ -78,7 +80,10 @@ public class BusApiController {
         return busRoutePath;
     }
 
-
+    @GetMapping("/getRoutePathByRouteId/{routeId}")
+    public List<BusStationInfo> getRoutePathByRouteId(@PathVariable(value="routeId") int routeId, Model model) {
+        return busBoardService.findAll(routeId);
+    }
 
     /**
      * 한 정류소의 특정노선의 도착예정정보를 조회한다. 정류소ID와 노선ID에 해당하는 도착예정정보를 조회한다.
