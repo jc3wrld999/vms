@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    username: root
+    url: jdbc:mariadb://localhost:3306/board_study
+    driverClassName: org.mariadb.jdbc.Driver
+    password: zmwpxm98:D
+  thymeleaf:
+    cache: "false"
+  freemarker:
+    cache: "false"
+  mvc:
+    static-path-pattern: /static/**
+  devtools:
+    livereload:
+      enabled: "true"
+  config:
+    import: classpath:/config.yaml
+logging:
+  level:
+    org:
+      springframework:
+        nodeValue: INFO
+        web: DEBUG
+mybatis:
+  type-aliases-package: com.vehicle.management.entity

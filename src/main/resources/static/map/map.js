@@ -205,6 +205,7 @@ function fetchArrInfoByRouteAll(routeId) {
 
 /* 특정 버스 노선별 도착정보 리스트에 뿌리기 */
 function getArrInfoByRouteAll(data) {
+  console.log(data);
   for (i = 0; i < data.length; i++) {
     var currentFeature = data[i];
     var prop = currentFeature.properties;

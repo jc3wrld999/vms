@@ -1,0 +1,12 @@
+bus:
+  api:
+    encoding:
+      auth_key: "fmIxIs8wvHrhpxGZG%2BKCYfWB7fW%2BPrh8uhOMLDCnxacWa9Udcb%2BKr%2BpnVj015zknVtnXKsobxYW83ab2ctedRg%3D%3D"
+    test:
+      routeId: 100100118
+      tmX: 126.886199
+      tmY: 37.476106
+      arsId: 12180
+    callback_url: http://ws.bus.go.kr/api/rest
+    decoding:
+      auth_key: fmIxIs8wvHrhpxGZG+KCYfWB7fW+Prh8uhOMLDCnxacWa9Udcb+Kr+pnVj015zknVtnXKsobxYW83ab2ctedRg==

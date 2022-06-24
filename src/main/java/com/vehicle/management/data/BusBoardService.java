@@ -53,20 +53,20 @@ public class BusBoardService {
     }
 
     public ResponseEntity<JsonNode> getRouteByStation(int arsId) {
-        ResponseEntity<JsonNode> response = busBoardApi.getRouteByStation(arsId);
-        JsonNode map = response.getBody();
-        // System.out.println(map.get("msgBody").get("itemList").get(0));
-        System.out.println(map.toString());
+        // ResponseEntity<JsonNode> response = busBoardApi.getRouteByStation(arsId);
+        // JsonNode map = response.getBody();
+        // // System.out.println(map.get("msgBody").get("itemList").get(0));
+        // System.out.println(map.toString());
 
-        Gson gson = new Gson();
-        Type type = new TypeToken<List<HashMap<String, Object>>>(){}.getType();
-        List<HashMap<String, Object>> list = gson.fromJson(map.get("msgBody").get("itemList").toString(), type);
-        ListIterator<HashMap<String, Object>> listIterator = list.listIterator();
-        while (listIterator.hasNext()) {
+        // Gson gson = new Gson();
+        // Type type = new TypeToken<List<HashMap<String, Object>>>(){}.getType();
+        // List<HashMap<String, Object>> list = gson.fromJson(map.get("msgBody").get("itemList").toString(), type);
+        // ListIterator<HashMap<String, Object>> listIterator = list.listIterator();
+        // while (listIterator.hasNext()) {
         
-            System.out.println(listIterator.next().get("busRouteId"));
-        }
-        System.out.print(list.toString());
+        //     System.out.println(listIterator.next().get("busRouteId"));
+        // }
+        // System.out.print(list.toString());
         // ArrayList <?> arrayList = map.get("msgBody").get("itemList");
         return busBoardApi.getRouteByStation(arsId);
     }
