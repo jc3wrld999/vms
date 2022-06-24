@@ -8,8 +8,8 @@ import org.apache.ibatis.type.Alias;
 import lombok.Data;
 
 @Data
-@Alias("BaseApiVO")
-public class BaseApiVO implements Serializable {
+@Alias("BaseApiEntity")
+public class BaseApiEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
     
