@@ -1,4 +1,4 @@
-package com.vehicle.management.entity;
+package com.vehicle.management.domain;
 
 import java.io.Serializable;
 

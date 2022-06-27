@@ -22,4 +22,4 @@ logging:
         nodeValue: INFO
         web: DEBUG
 mybatis:
-  type-aliases-package: com.vehicle.management.entity
+  type-aliases-package: com.vehicle.management.domain

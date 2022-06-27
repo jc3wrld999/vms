@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.vehicle.management.data.db.BusBoardMapper">
+<mapper namespace="com.vehicle.management.repository.db.BusBoardMapper">
     
     <select id ="selectRoutePathByRouteId" resultType="BusStationInfo">
         SELECT DISTINCT * FROM STATION_INFO WHERE ROUTE_ID = #{busRouteId} ORDER BY STATION_NO ASC
