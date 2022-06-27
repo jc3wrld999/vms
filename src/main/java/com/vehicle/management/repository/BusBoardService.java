@@ -1,9 +1,6 @@
-package com.vehicle.management.data;
+package com.vehicle.management.repository;
 
-import java.lang.reflect.Type;
-import java.util.HashMap;
 import java.util.List;
-import java.util.ListIterator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,12 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.vehicle.management.data.api.BusBoardApi;
-import com.vehicle.management.data.db.BusBoardMapper;
-import com.vehicle.management.entity.BusStationInfo;
-import com.vehicle.management.entity.RouteId;
+import com.vehicle.management.repository.api.BusBoardApi;
+import com.vehicle.management.repository.db.BusBoardMapper;
+import com.vehicle.management.domain.BusStationInfo;
+import com.vehicle.management.domain.RouteId;
 
 import lombok.RequiredArgsConstructor;
 

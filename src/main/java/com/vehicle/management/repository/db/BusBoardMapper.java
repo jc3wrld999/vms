@@ -1,12 +1,12 @@
-package com.vehicle.management.data.db;
+package com.vehicle.management.repository.db;
 
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
-import com.vehicle.management.entity.BusStationInfo;
-import com.vehicle.management.entity.RouteId;
+import com.vehicle.management.domain.BusStationInfo;
+import com.vehicle.management.domain.RouteId;
 
 @Mapper
 @Repository

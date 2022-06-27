@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vehicle.management.data.BusBoardService;
-import com.vehicle.management.entity.BusStationInfo;
-import com.vehicle.management.entity.RouteId;
+import com.vehicle.management.repository.BusBoardService;
+import com.vehicle.management.domain.BusStationInfo;
+import com.vehicle.management.domain.RouteId;
 
 import lombok.RequiredArgsConstructor;
 

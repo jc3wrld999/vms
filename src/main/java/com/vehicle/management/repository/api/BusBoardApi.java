@@ -1,4 +1,4 @@
-package com.vehicle.management.data.api;
+package com.vehicle.management.repository.api;
 
 import java.net.URI;
 import java.nio.charset.Charset;
