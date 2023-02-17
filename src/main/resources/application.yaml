@@ -3,7 +3,7 @@ spring:
     username: root
     url: jdbc:mariadb://localhost:3306/board_study
     driverClassName: org.mariadb.jdbc.Driver
-    password: zmwpxm98:D
+    password: 
   thymeleaf:
     cache: "false"
   freemarker:
