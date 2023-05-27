@@ -136,18 +136,18 @@ function getRouteByStation(data, stationNm) {
 }
 
 /* 특정 버스 노선도 조회 */
-function fetchRoutePath(routeId) {
-  $.ajax({
-    url: "/api/rest/getRoutePathByRouteId/" + routeId,
-    type: "get",
-    success: function (data) {
-      getRoutePath(data);
-    },
-    error: function (e) {
-      console.log(e);
-    },
-  });
-}
+// function fetchRoutePath(routeId) {
+//   $.ajax({
+//     url: "/api/rest/getRoutePathByRouteId/" + routeId,
+//     type: "get",
+//     success: function (data) {
+//       getRoutePath(data);
+//     },
+//     error: function (e) {
+//       console.log(e);
+//     },
+//   });
+// }
 
 /* 특정 버스 노선도 지도에 그리기 */
 function getRoutePath(data) {

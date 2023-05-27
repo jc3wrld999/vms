@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.vehicle.management.repository.api.BusBoardApi;
-import com.vehicle.management.repository.db.BusBoardMapper;
+// import com.vehicle.management.repository.db.BusBoardMapper;
 import com.vehicle.management.domain.BusStationInfo;
 import com.vehicle.management.domain.RouteId;
 
@@ -19,21 +19,21 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class BusBoardService {
     
-    @Autowired
-    private BusBoardMapper busBoardMapper;
+    // @Autowired
+    // private BusBoardMapper busBoardMapper;
 
     @Autowired
     private BusBoardApi busBoardApi;
 
-    @Transactional
-    public List<RouteId> getRouteIdByRouteNm(String routeNm) {
-        return busBoardMapper.selectRouteIdByRouteNm(routeNm);
-    }
+    // @Transactional
+    // public List<RouteId> getRouteIdByRouteNm(String routeNm) {
+    //     return busBoardMapper.selectRouteIdByRouteNm(routeNm);
+    // }
 
-    @Transactional
-    public List<BusStationInfo> getRoutePathByRouteId(int routeId) {
-        return busBoardMapper.selectRoutePathByRouteId(routeId);
-    }
+    // @Transactional
+    // public List<BusStationInfo> getRoutePathByRouteId(int routeId) {
+    //     return busBoardMapper.selectRoutePathByRouteId(routeId);
+    // }
 
     public ResponseEntity<?> getArrInfoByRouteAll(int busRouteId) {
         return busBoardApi.getArrInfoByRouteAll(busRouteId);

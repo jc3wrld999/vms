@@ -1,9 +1,9 @@
 spring:
-  datasource:
-    username: root
-    url: jdbc:mariadb://localhost:3306/board_study
-    driverClassName: org.mariadb.jdbc.Driver
-    password: 
+  # datasource:
+  #   username: root
+  #   url: jdbc:mariadb://localhost:3306/board_study
+  #   driverClassName: org.mariadb.jdbc.Driver
+  #   password: 
   thymeleaf:
     cache: "false"
   freemarker:

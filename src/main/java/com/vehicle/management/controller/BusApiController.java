@@ -49,17 +49,18 @@ public class BusApiController {
         return busArriveInfoList;
     }
 
-    /** 특정 버스 노선 좌표 정보 가져오기 */
-    @GetMapping("/getRoutePathByRouteId/{routeId}")
-    public List<BusStationInfo> getRoutePathByRouteId(@PathVariable(value="routeId") int routeId) {
-        return busBoardService.getRoutePathByRouteId(routeId);
-    }
+    // /** 특정 버스 노선 좌표 정보 가져오기 */
+    // @GetMapping("/getRoutePathByRouteId/{routeId}")
+    // public List<BusStationInfo> getRoutePathByRouteId(@PathVariable(value="routeId") int routeId) {
+    // //     return busBoardService.getRoutePathByRouteId(routeId);
 
-    /** 버스번호 조회 */
-    @GetMapping("/getRouteIdByRouteNm/{routeNm}")
-    public List<RouteId> getRouteIdByRouteNm(@PathVariable(value="routeNm") String routeNm) {
-        return busBoardService.getRouteIdByRouteNm(routeNm);
-    }
+    // // }
+
+    // /** 버스번호 조회 */
+    // @GetMapping("/getRouteIdByRouteNm/{routeNm}")
+    // public List<RouteId> getRouteIdByRouteNm(@PathVariable(value="routeNm") String routeNm) {
+    //     // return busBoardService.getRouteIdByRouteNm(routeNm);
+    // }
 
     /**
      * 한 정류소의 특정노선의 도착예정정보를 조회한다. 정류소ID와 노선ID에 해당하는 도착예정정보를 조회한다.
