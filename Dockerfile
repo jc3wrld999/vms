@@ -1,3 +1,4 @@
-FROM java:8
+FROM openjdk:8-jdk
+ADD ./build/libs/*.jar app.jar
 EXPOSE 8888
-CMD ["java","-jar","/build/libs/com.vehicle.management-0.0.2-SNAPSHOT.jar"]
+CMD ["java","-jar","app.jar"]
