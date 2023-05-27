@@ -18,7 +18,7 @@ public class BusBoardController {
     @GetMapping("/index")
     public String getBoardIndex() {
         
-        return "/bus/index";
+        return "bus/index";
     }
 
     @GetMapping("/routeInfo")
@@ -26,13 +26,13 @@ public class BusBoardController {
 
         model.addAttribute("routeId", routeId);
         
-        return "/bus/routeInfo";
+        return "bus/routeInfo";
     }
 
     @GetMapping("/stationInfo")
     public String getBoardMap5() {
 
-        return "/bus/stationInfo";
+        return "bus/stationInfo";
     }
 
 }
