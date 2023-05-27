@@ -1,0 +1,15 @@
+# fly.toml app configuration file generated for vehicle-management-system on 2023-05-27T21:48:39+09:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "vehicle-management-system"
+primary_region = "nrt"
+[build]
+  image = "jc3wrld999/vehicle-management-system:0.0.5"
+[http_service]
+  internal_port = 8888
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
