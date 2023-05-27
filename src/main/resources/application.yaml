@@ -21,5 +21,7 @@ logging:
       springframework:
         nodeValue: INFO
         web: DEBUG
+server:
+  port: 8888
 mybatis:
   type-aliases-package: com.vehicle.management.domain
