@@ -4,6 +4,15 @@ plugins {
 	id 'java'
 }
 
+bootJar {
+    // archiveName = "app.jar"
+    mainClass = 'com.vehicle.management.VehicleManagementProjectApplication'
+
+    from('frontend/dist') {
+        into 'static'
+    }
+}
+
 group = 'com.vehicle.management'
 version = '0.0.2-SNAPSHOT'
 sourceCompatibility = '8'
