@@ -21,6 +21,7 @@ var map = new mapboxgl.Map({
 
 // Marker
 var currentMarkers = [];
+var currentRoute = [];
 
 /* 현재 좌표 가져오기 */
 function getLocation(callback) {
@@ -133,29 +134,32 @@ function getRouteByStation(data, stationNm) {
     details.innerHTML = currentFeature["stBegin"];
     details.innerHTML += " &middot; " + currentFeature["stEnd"];
   }
+  
 }
 
 /* 특정 버스 노선도 조회 */
-// function fetchRoutePath(routeId) {
-//   $.ajax({
-//     url: "/api/rest/getRoutePathByRouteId/" + routeId,
-//     type: "get",
-//     success: function (data) {
-//       getRoutePath(data);
-//     },
-//     error: function (e) {
-//       console.log(e);
-//     },
-//   });
-// }
+function fetchRoutePath(routeId) {
+  $.ajax({
+    url: "/api/rest/getRoutePathByRouteId/" + routeId,
+    type: "get",
+    success: function (data) {
+      getRoutePath(data);
+    },
+    error: function (e) {
+      console.log(e);
+    },
+  });
+}
 
 /* 특정 버스 노선도 지도에 그리기 */
 function getRoutePath(data) {
+  currentRoute = data.msgBody.itemList;
   document.getElementById("heading-num").innerHTML =
-    data[0]["route_name"] + "번 버스 노선도";
+  currentRoute[0]["busRouteNm"] + "번 버스 노선도";
   const copy = [];
-  for (i = 0; i < data.length; i++) {
-    var arr = [data[i]["coordinate_x"], data[i]["coordinate_y"]];
+  
+  for (i = 0; i < currentRoute.length; i++) {
+    var arr = [currentRoute[i]["gpsX"], currentRoute[i]["gpsY"]];
     copy.push(arr);
   }
 
@@ -185,6 +189,8 @@ function getRoutePath(data) {
       },
     });
   });
+  // map 이동
+  flyto(currentRoute[0]["gpsX"], currentRoute[0]["gpsY"], 12);
 }
 
 /* 특정 버스 노선별 도착정보 조회 */
@@ -205,7 +211,7 @@ function fetchArrInfoByRouteAll(routeId) {
 
 /* 특정 버스 노선별 도착정보 리스트에 뿌리기 */
 function getArrInfoByRouteAll(data) {
-  console.log(data);
+  // console.log(data);
   for (i = 0; i < data.length; i++) {
     var currentFeature = data[i];
     var prop = currentFeature.properties;
@@ -215,7 +221,7 @@ function getArrInfoByRouteAll(data) {
     listing.id = "listing-" + i;
 
     var link = listing.appendChild(document.createElement("a"));
-    link.href = "#";
+    link.href = "javascript:flytoByArsId("+currentFeature["arsId"]+",'"+currentFeature["stNm"]+"')";
     link.className = "title";
     link.dataPosition = i;
     link.innerHTML = currentFeature["stNm"];
@@ -224,4 +230,50 @@ function getArrInfoByRouteAll(data) {
     details.innerHTML = currentFeature["arrmsg1"];
     details.innerHTML += " &middot; " + currentFeature["arrmsg2"];
   }
+}
+
+/* 버스번호로 조회 */
+function searchRouteBtn(routNm) {
+
+}
+
+/* move map center */
+function flyto(x, y, _zoom) {
+  map.flyTo({
+    center: [x, y],
+    essential: true,
+    zoom: _zoom,
+  });
+}
+
+function flytoByArsId(arsId, stNm) {
+  removeMarker();
+  // const array1 = currentRoute.map(target => target.genre[0]);
+  var _curr = [];
+  currentRoute.forEach(function(item, index) { 
+    if(item.arsId = arsId && item.stationNm == stNm) {
+      _curr.push(item.gpsX);
+      _curr.push(item.gpsY);
+    }
+  });
+  flyto(_curr[0], _curr[1], 14);
+
+  var el = document.createElement("div");
+  el.className = "bus_marker";
+  // el.setAttribute("stationId", currentFeature["stationId"]);
+  el.setAttribute("arsId", arsId);
+  el.setAttribute("stationNm", stNm);
+  // Marker 생성
+  var marker1 = new mapboxgl.Marker(el)
+  .setLngLat([_curr[0], _curr[1]])
+  .setPopup(
+    new mapboxgl.Popup({ offset: 5 }) // add popups
+      .setHTML("<h4>" + stNm + "</h4>")
+  )
+  .addTo(map);
+  currentMarkers.push(marker1);
+  // console.log(array)
+  // var _curr = currentRoute.filter(function(e){
+  //     return e.arsId === arsId;
+  // });
 }

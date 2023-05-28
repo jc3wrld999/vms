@@ -4,10 +4,10 @@
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
-      <a href="index3.html" class="brand-link">
+      <a href="#" class="brand-link">
         <img
           src="/static/icon/bus_stop_marker.png"
-          alt="AdminLTE Logo"
+          alt="Logo"
           class="brand-image img-circle elevation-3"
           style="opacity: 0.8"
         />
@@ -31,12 +31,12 @@
         </div> -->
 
         <!-- SidebarSearch Form -->
-        <div class="form-inline">
+        <!-- <div class="form-inline">
           <div class="input-group" data-widget="sidebar-search">
             <input
               class="form-control form-control-sidebar"
               type="search"
-              placeholder="Search"
+              placeholder="출발지"
               aria-label="Search"
               id="searchRouteNm"
             />
@@ -46,7 +46,7 @@
               </button>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <!-- Sidebar Menu -->
         <nav class="mt-2">
@@ -88,7 +88,9 @@
       <!-- /.sidebar -->
     </aside>
     <script>
-      $("#searchRouteBtn").on("click", function (e) {});
+      $("#searchRouteBtn").on("click", function (e) {
+        searchRouteBtn();
+      });
     </script>
   </th:block>
 </html>

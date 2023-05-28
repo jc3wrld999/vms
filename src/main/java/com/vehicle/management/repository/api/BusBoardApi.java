@@ -2,6 +2,7 @@ package com.vehicle.management.repository.api;
 
 import java.net.URI;
 import java.nio.charset.Charset;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -14,6 +15,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.vehicle.management.domain.BusStationInfo;
+import com.vehicle.management.domain.RouteId;
 
 @Repository
 public class BusBoardApi {
@@ -96,6 +99,36 @@ public class BusBoardApi {
     public ResponseEntity<?> getRoutePath(int busRouteId) {
         
         String url = callBackUrl + "/busRouteInfo/getRoutePath";
+
+        RestTemplate restTemplate = new RestTemplate();
+        
+        URI uri = UriComponentsBuilder.fromHttpUrl(url).queryParam("serviceKey", serviceKey)
+                                                                .queryParam("busRouteId", busRouteId)
+                                                                .queryParam("resultType", "json")
+                                                                .build(true)
+                                                                .toUri();
+        
+        ResponseEntity<?> response = restTemplate.getForEntity(uri, String.class);
+        return response;
+    }
+
+    public ResponseEntity<?> getRouteIdByRouteNm(int routeNm) {
+        String url = callBackUrl + "/busRouteInfo/getRoutePath";
+
+        RestTemplate restTemplate = new RestTemplate();
+        
+        URI uri = UriComponentsBuilder.fromHttpUrl(url).queryParam("serviceKey", serviceKey)
+                                                                .queryParam("busRouteId", routeNm)
+                                                                .queryParam("resultType", "json")
+                                                                .build(true)
+                                                                .toUri();
+        
+        ResponseEntity<?> response = restTemplate.getForEntity(uri, String.class);
+        return response;
+    }
+    //
+    public ResponseEntity<?> getRoutePathByRouteId(int busRouteId) {
+        String url = callBackUrl + "/busRouteInfo/getStaionByRoute";
 
         RestTemplate restTemplate = new RestTemplate();
         

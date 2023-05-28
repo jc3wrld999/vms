@@ -1,9 +1,9 @@
 spring:
   # datasource:
   #   username: root
-  #   url: jdbc:mariadb://localhost:3306/board_study
+  #   url: jdbc:mariadb://localhost:3306/mysql
   #   driverClassName: org.mariadb.jdbc.Driver
-  #   password: 
+  #   password: qwer:D1234
   thymeleaf:
     cache: "false"
   freemarker:

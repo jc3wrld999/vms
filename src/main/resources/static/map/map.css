@@ -32,6 +32,9 @@ body {
   -webkit-transition: width 500ms, height 500ms, left 500ms; /* For Safari 3.1 to 6.0 */
   transition: width 500ms, height 500ms, left 500ms;
 }
+.mapboxgl-canvas {
+  height:100% !important;
+}
 h1 {
   font-size: 22px;
   margin: 0;

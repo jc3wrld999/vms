@@ -25,15 +25,14 @@ public class BusBoardService {
     @Autowired
     private BusBoardApi busBoardApi;
 
-    // @Transactional
-    // public List<RouteId> getRouteIdByRouteNm(String routeNm) {
-    //     return busBoardMapper.selectRouteIdByRouteNm(routeNm);
-    // }
+    public ResponseEntity<?> getRouteIdByRouteNm(int routeNm) {
+        return busBoardApi.getRouteIdByRouteNm(routeNm);
+    }
 
     // @Transactional
-    // public List<BusStationInfo> getRoutePathByRouteId(int routeId) {
-    //     return busBoardMapper.selectRoutePathByRouteId(routeId);
-    // }
+    public ResponseEntity<?> getRoutePathByRouteId(int routeId) {
+        return busBoardApi.getRoutePathByRouteId(routeId);
+    }
 
     public ResponseEntity<?> getArrInfoByRouteAll(int busRouteId) {
         return busBoardApi.getArrInfoByRouteAll(busRouteId);
