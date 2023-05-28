@@ -1,4 +1,5 @@
 FROM openjdk:8-jdk
+RUN rm -rf *.jar
 ADD ./build/libs/*.jar app.jar
 RUN echo "test..."
 EXPOSE 8888
