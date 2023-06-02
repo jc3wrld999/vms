@@ -4,14 +4,14 @@ plugins {
 	id 'java'
 }
 
-bootJar {
-    // archiveName = "app.jar"
-    mainClass = 'com.vehicle.management.VehicleManagementProjectApplication'
+// bootJar {
+//     // archiveName = "app.jar"
+//     mainClass = 'com.vehicle.management.VehicleManagementProjectApplication'
 
-    from('frontend/dist') {
-        into 'static'
-    }
-}
+//     from('src/main/resources/static') {
+//         into 'src/main/resources/static'
+//     }
+// }
 
 group = 'com.vehicle.management'
 version = '0.0.2-SNAPSHOT'

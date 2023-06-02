@@ -2,6 +2,25 @@
 mapboxgl.accessToken =
   "pk.eyJ1IjoiamMzd3JsZDk5OSIsImEiOiJjbDRtdGV3ODEwMm9wM2ttZXpjZHRnZHFhIn0.3WMaZZTngmkKBFLQY1IgcQ"; // 계정에 있는 Public Access Token 입력
 
+var currentMarkers = []; // Marker
+var currentRoute = [];
+const initX = 126.886199;
+const initY = 37.476106;
+
+if($('#ssIFrame_google').length) {
+  var google_sandbox = $('#ssIFrame_google').attr('sandbox')
+  google_sandbox += ' allow-modals'
+  $('#ssIFrame_google').attr('sandbox', google_sandbox)
+}
+
+// Map Init
+var map = new mapboxgl.Map({
+  container: "map",
+  style: "mapbox://styles/mapbox/streets-v9",
+  center: [initX, initY],
+  zoom: 14,
+});
+
 // This will let you use the .remove() function later on
 if (!("remove" in Element.prototype)) {
   Element.prototype.remove = function () {
@@ -11,20 +30,9 @@ if (!("remove" in Element.prototype)) {
   };
 }
 
-// Map Init
-var map = new mapboxgl.Map({
-  container: "map",
-  style: "mapbox://styles/mapbox/streets-v9",
-  center: [126.886199, 37.476106],
-  zoom: 12,
-});
-
-// Marker
-var currentMarkers = [];
-var currentRoute = [];
-
 /* 현재 좌표 가져오기 */
 function getLocation(callback) {
+
   if ("geolocation" in navigator) {
     navigator.geolocation.getCurrentPosition((position) => {
       // map 이동
@@ -34,14 +42,22 @@ function getLocation(callback) {
         zoom: 14,
       });
       if (arguments.length > 0) {
-        callback(position.coords.longitude, position.coords.latitude);
+        return callback(position.coords.longitude, position.coords.latitude);
       }
     });
+    callback(initX, initY);
+  } else {
+    callback(initX, initY);
   }
 }
 
 /* 좌표로 정류장 가져오기 */
 function fetchStationByPos(long, lat) {
+
+  if(long == null | lat == null) {
+    long = map.getCenter().lng
+    lat = map.getCenter().lat
+  }
   $.ajax({
     url: "/api/rest/getStationByPos",
     data: { tmX: long, tmY: lat, radius: 1000 },
